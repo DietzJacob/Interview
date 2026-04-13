@@ -1,5 +1,5 @@
 // ─── Supabase ─────────────────────────────────────────────────────────────────
-const SUPA_URL  = 'https://ygclnqsqjggtewwkyira.supabase.co';
+const SUPA_URL  = 'https://ekjmynbowthpemyfrqim.supabase.co';
 const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnbGNucXNxamdndGV3d2t5aXJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwODY0MTgsImV4cCI6MjA5MTY2MjQxOH0.rcYUcSNNlcW54FMkr3TYDnkV69fZyGf9OYAm5EoLyJs';
 const supa      = supabase.createClient(SUPA_URL, SUPA_KEY);
 let   currentUser = null;
