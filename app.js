@@ -830,4 +830,4 @@ function bOverlayBg(e){ if(e.target===document.getElementById('boverlay')) close
 
 // Auth listener handles initial load and render
 // load(); loadGuide(); loadBias(); render(); — called after auth
-</script>
+
