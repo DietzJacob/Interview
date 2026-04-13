@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Studio · & Dietz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:     #F8F7F4;
+  --white:  #FFFFFF;
+  --border: #E8E4DC;
+  --text:   #1A1916;
+  --muted:  #B8B3AA;
+  --subtle: #888;
+  --serif:  'DM Serif Display', Georgia, serif;
+  --sans:   'DM Sans', system-ui, sans-serif;
+  --c-aabning:     #1A5A8A; --bg-aabning:     #E6EFF8;
+  --c-kompetencer: #2D6A5F; --bg-kompetencer: #EAF4F2;
+  --c-adfaerd:     #5E3580; --bg-adfaerd:     #EDE6F5;
+  --c-resultater:  #3A6A20; --bg-resultater:  #EAF4E0;
+  --c-reference:   #6A5020; --bg-reference:   #F5F0E0;
+}
+html { font-family: var(--sans); background: var(--bg); color: var(--text); -webkit-text-size-adjust: 100%; }
+body { min-height: 100vh; }
+
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg); border-bottom: 1px solid var(--border);
+  height: 56px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 20px;
+}
+.logo-a { font-family: var(--serif); font-size: 19px; }
+.logo-b { font-family: var(--serif); font-size: 19px; font-style: italic; color: var(--muted); margin-left: 5px; }
+.header-btns { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+
+.layout { max-width: 980px; margin: 0 auto; padding: 20px; display: flex; gap: 24px; }
+
+/* Sidebar */
+aside { width: 196px; flex-shrink: 0; }
+.s-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+.f-btn {
+  display: flex; justify-content: space-between; align-items: center;
+  width: 100%; padding: 9px 11px; margin-bottom: 3px;
+  border-radius: 8px; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 13px;
+  background: transparent; color: var(--subtle); text-align: left; transition: all .12s;
+}
+.f-btn:hover:not(.active) { background: #EDEAE3; color: var(--text); }
+.f-btn.active { font-weight: 600; }
+.f-cnt { font-size: 11px; opacity: .55; }
+
+.sidebar-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+.sel-panel { display: none; }
+.sel-panel.on { display: block; }
+.sel-lbl { font-size: 9.5px; font-weight: 700; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.sel-n { font-size: 12px; color: var(--subtle); margin-bottom: 8px; }
+
+.tab-btn { padding:5px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12.5px;font-weight:500;font-family:var(--sans);background:transparent;color:var(--subtle);transition:all .15s; }
+.tab-btn.active { background:var(--text);color:var(--bg); }
+
+/* Guide section */
+#guide-layout { display:none;max-width:980px;margin:0 auto;padding:20px;gap:24px; }
+#guide-layout.on { display:flex; }
+#bias-layout { display:none;max-width:980px;margin:0 auto;padding:20px;gap:24px; }
+#bias-layout.on { display:flex; }
+.bias-intro { background:#FFF;border:1px solid var(--border);border-radius:12px;padding:24px 26px;margin-bottom:20px; }
+.bias-intro-title { font-family:var(--serif);font-size:20px;font-weight:400;color:var(--text);margin-bottom:12px; }
+.bias-intro-body { font-size:13px;color:var(--subtle);line-height:1.75;margin-bottom:16px; }
+.bias-story { background:#F8F7F4;border-radius:9px;padding:16px 18px;font-size:12.5px;color:#888;line-height:1.75;border-left:3px solid #D5D1CB; }
+.bias-story-lbl { font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:8px; }
+.g-aside { width:196px;flex-shrink:0; }
+.g-main { flex:1;min-width:0; }
+
+.g-card { background:var(--white);border:1px solid var(--border);border-left:3px solid #C5C0B8;border-radius:10px;margin-bottom:8px;transition:border-color .13s; }
+.g-card.expanded { border-left-color:var(--text); }
+.g-card-top { display:flex;align-items:flex-start;padding:14px 13px 14px 11px;gap:9px;cursor:pointer; }
+.g-num { font-family:var(--serif);font-size:20px;color:#D5D1CB;flex-shrink:0;width:28px;line-height:1.2;margin-top:1px; }
+.g-summary { flex:1;min-width:0; }
+.g-headline { font-size:14px;font-weight:600;color:var(--text);line-height:1.5; }
+.g-short { font-size:13px;line-height:1.65;color:var(--subtle);margin-top:4px; }
+.g-toggle { font-size:11px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;font-family:var(--sans);padding:4px 0 0;display:inline-flex;align-items:center;gap:4px;margin-top:6px; }
+.g-detail { padding:0 14px 14px 50px;font-size:13px;line-height:1.75;color:var(--subtle);white-space:pre-line;border-top:1px solid var(--border);padding-top:13px;margin-top:0; }
+.g-detail strong { color:var(--text);font-weight:600; }
+.g-actions { display:flex;align-items:center;gap:5px;flex-shrink:0;margin-left:6px; }
+
+/* Guide modal */
+.gmodal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:300;display:none;align-items:center;justify-content:center;padding:20px; }
+.gmodal-overlay.on { display:flex; }
+.gmodal { background:var(--bg);border-radius:14px;padding:28px;width:100%;max-width:560px;box-shadow:0 28px 70px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto; }
+.gmodal h2 { font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:22px; }
+
+/* Buttons */
+.btn { border: none; border-radius: 7px; cursor: pointer; font-family: var(--sans); font-size: 12.5px; font-weight: 500; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn-p { background: var(--text); color: var(--bg); padding: 7px 15px; }
+.btn-p:hover { background: #333; }
+.btn-o { background: transparent; color: var(--subtle); padding: 7px 14px; border: 1.5px solid var(--border); }
+.btn-o:hover { border-color: #BBB; color: var(--text); }
+.btn-share { background: transparent; color: #2D6A5F; padding: 7px 14px; border: 1.5px solid #B8DDD8; }
+.btn-share:hover { background: #EAF4F2; border-color: #2D6A5F; }
+.btn-blk { width: 100%; justify-content: center; padding: 7px 10px; font-size: 11.5px; }
+.btn-blk + .btn-blk { margin-top: 5px; }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: #C5C0B8; }
+.btn-ghost:hover { color: var(--subtle); border-color: #BBB; }
+
+/* Cards */
+main { flex: 1; min-width: 0; }
+
+.cat-section-hd {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .13em;
+  text-transform: uppercase; margin: 20px 0 8px 2px;
+  display: flex; align-items: center; gap: 7px;
+}
+.cat-section-hd.first { margin-top: 0; }
+.cat-hd-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+.q-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius: 10px; margin-bottom: 6px;
+  transition: box-shadow .13s, border-color .13s;
+  touch-action: none; /* needed for custom touch drag */
+}
+.q-card.starred   { border-left-color: var(--cc, #888); }
+.q-card.drag-over { box-shadow: 0 0 0 2.5px var(--cc, #888); border-color: var(--cc, #888); }
+.q-card.dragging  { opacity: .3; }
+
+.q-inner { display: flex; align-items: flex-start; padding: 13px 12px 13px 10px; gap: 8px; }
+.handle {
+  color: #C8C3BB; font-size: 16px; padding: 4px 3px;
+  flex-shrink: 0; line-height: 1; cursor: grab; user-select: none;
+  touch-action: none;
+}
+.handle:active { cursor: grabbing; color: #888; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+.q-body { flex: 1; min-width: 0; }
+.q-text { font-size: 13.5px; line-height: 1.65; }
+.n-btn { margin-top: 6px; font-size: 11px; background: none; border: none; cursor: pointer; font-family: var(--sans); padding: 4px 0; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+.n-body { margin-top: 7px; padding: 9px 12px; border-radius: 7px; font-size: 12px; line-height: 1.75; white-space: pre-line; }
+.q-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 6px; }
+.badge { font-size: 9.5px; padding: 2px 7px; border-radius: 4px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.ic { width: 32px; height: 32px; border-radius: 7px; border: 1.5px solid var(--border); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .13s, color .13s, background .13s; color: #C5C0B8; font-size: 13px; }
+.ic.ed:hover  { border-color: var(--cc); color: var(--cc); }
+.ic.str       { font-size: 16px; }
+.ic.str.on    { border-color: #D4A020; background: #FFF9EC; color: #D4A020; }
+.ic.del       { font-size: 15px; }
+.ic.del:hover { border-color: #C03030; color: #C03030; }
+
+.empty { text-align: center; padding: 70px 0; color: #C5C0B8; }
+.empty h2 { font-family: var(--serif); font-size: 22px; margin-bottom: 7px; font-weight: 400; }
+.empty p  { font-size: 13px; }
+
+/* Delete confirm */
+.del-confirm {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 500;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.del-confirm.on { display: flex; }
+.del-box { background: var(--bg); border-radius: 12px; padding: 24px 26px; max-width: 380px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.del-box h3 { font-family: var(--serif); font-size: 18px; font-weight: 400; margin-bottom: 10px; }
+.del-box p  { font-size: 13px; color: var(--subtle); line-height: 1.6; margin-bottom: 20px; }
+.del-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.btn-danger { background: #C03030; color: #fff; padding: 7px 16px; }
+.btn-danger:hover { background: #A02020; }
+
+/* Modal */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+.overlay.on { display: flex; }
+.modal { background: var(--bg); border-radius: 14px; padding: 28px; width: 100%; max-width: 520px; box-shadow: 0 28px 70px rgba(0,0,0,.2); max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-family: var(--serif); font-size: 22px; font-weight: 400; margin-bottom: 22px; }
+.flbl { font-size: 9.5px; font-weight: 700; letter-spacing: .13em; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 7px; }
+.flbl span { font-weight: 400; color: #C5C0B8; text-transform: none; letter-spacing: 0; }
+textarea, input[type=text] {
+  width: 100%; border: 1.5px solid #E0DDD7; border-radius: 8px;
+  padding: 10px 12px; font-size: 13.5px; font-family: var(--sans);
+  outline: none; background: #FFF; line-height: 1.65; color: var(--text); display: block;
+}
+textarea { resize: vertical; }
+textarea:focus, input[type=text]:focus { border-color: #888; box-shadow: 0 0 0 3px rgba(0,0,0,.04); }
+.cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 18px; }
+.cat-opt { padding: 9px 12px; border-radius: 7px; border: 1.5px solid #DDD; background: transparent; color: #999; cursor: pointer; font-size: 13px; font-weight: 600; font-family: var(--sans); text-align: left; transition: all .12s; }
+.cat-opt.sel { font-weight: 700; }
+.mfooter { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
+
+/* Print view */
+#pv { display: none; max-width: 700px; margin: 0 auto; padding: 40px 52px; font-family: var(--sans); }
+#pv.on { display: block; }
+.pv-ctrl { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+.pv-hdr { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 2px solid var(--text); }
+.pv-title  { font-family: var(--serif); font-size: 28px; }
+.pv-meta   { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.pv-brand  { font-size: 11px; color: #C5C0B8; font-style: italic; text-align: right; }
+.pv-cat    { margin-bottom: 28px; }
+.pv-cat-hd { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+.pv-dot    { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.pv-q      { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid #EDEAE4; display: flex; gap: 14px; page-break-inside: avoid; }
+.pv-num    { font-family: var(--serif); font-size: 20px; color: #D5D1CB; flex-shrink: 0; width: 26px; line-height: 1.2; }
+.pv-qt     { font-size: 13.5px; line-height: 1.75; flex: 1; }
+.pv-line   { height: 1px; background: #E0DDD7; margin-top: 14px; }
+
+
+@media print {
+  header, .layout, .pv-ctrl { display: none !important; }
+  #pv { display: block !important; padding: 0; }
+  @page { margin: 2cm; }
+}
+
+/* Hero banner */
+.hero-banner {
+  background: var(--text); color: var(--bg);
+  border-radius: 12px; padding: 28px 28px 24px;
+  margin-bottom: 20px;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+}
+.hero-eyebrow { font-size: 9.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 10px; }
+.hero-title { font-family: var(--serif); font-size: 26px; line-height: 1.15; margin-bottom: 12px; }
+.hero-body  { font-size: 12.5px; line-height: 1.7; color: rgba(255,255,255,.5); max-width: 340px; }
+.hero-left  { flex: 1; }
+.hero-right { display: flex; gap: 20px; flex-shrink: 0; align-items: flex-end; padding-bottom: 2px; }
+.hero-stat  { text-align: center; }
+.hero-n { font-family: var(--serif); font-size: 28px; display: block; color: rgba(255,255,255,.7); line-height: 1; }
+.hero-l { font-size: 10px; color: rgba(255,255,255,.3); display: block; margin-top: 3px; letter-spacing: .04em; }
+
+/* Guide intro */
+.guide-intro { margin-bottom: 18px; }
+.guide-intro-inner { border-left: 3px solid var(--border); padding: 14px 0 14px 18px; }
+.guide-intro-tag { font-size: 9.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.guide-intro-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 9px; }
+.guide-intro-text { font-size: 13px; line-height: 1.72; color: var(--subtle); }
+
+
+/* Auth screen */
+.auth-screen {
+  position: fixed; inset: 0; background: var(--bg); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.auth-screen.hidden { display: none; }
+.auth-box {
+  background: var(--white); border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px 36px; width: 100%; max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.08);
+}
+.auth-logo { font-family: var(--serif); font-size: 22px; margin-bottom: 6px; }
+.auth-logo span { font-style: italic; color: var(--muted); margin-left: 4px; }
+.auth-tagline { font-size: 12.5px; color: var(--muted); margin-bottom: 32px; }
+.auth-tabs { display: flex; gap: 2px; background: #EDEAE3; border-radius: 8px; padding: 3px; margin-bottom: 24px; }
+.auth-tab { flex: 1; padding: 6px; border: none; border-radius: 6px; cursor: pointer; font-family: var(--sans); font-size: 13px; font-weight: 500; background: transparent; color: var(--subtle); transition: all .15s; }
+.auth-tab.active { background: var(--text); color: var(--bg); }
+.auth-field { margin-bottom: 14px; }
+.auth-field label { font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 6px; }
+.auth-field input { width: 100%; border: 1.5px solid #E0DDD7; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: var(--sans); outline: none; background: #FFF; color: var(--text); }
+.auth-field input:focus { border-color: #888; box-shadow: 0 0 0 3px rgba(0,0,0,.04); }
+.auth-btn { width: 100%; padding: 11px; background: var(--text); color: var(--bg); border: none; border-radius: 8px; cursor: pointer; font-family: var(--sans); font-size: 14px; font-weight: 500; margin-top: 8px; transition: background .15s; }
+.auth-btn:hover { background: #333; }
+.auth-btn:disabled { background: #CCC; cursor: default; }
+.auth-msg { font-size: 12.5px; margin-top: 12px; padding: 10px 12px; border-radius: 7px; display: none; }
+.auth-msg.error { background: #FEF0F0; color: #A03030; display: block; }
+.auth-msg.success { background: #EAF4F2; color: #2D6A5F; display: block; }
+.auth-divider { display: flex; align-items: center; gap: 10px; margin: 18px 0; color: var(--muted); font-size: 11px; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.auth-google { width: 100%; padding: 10px; background: transparent; color: var(--text); border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-family: var(--sans); font-size: 13.5px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color .15s; }
+.auth-google:hover { border-color: #BBB; }
+.auth-google svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* User pill in header */
+.user-pill { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--subtle); }
+.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--text); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.btn-signout { background: transparent; border: 1.5px solid var(--border); color: var(--subtle); padding: 4px 10px; font-size: 11.5px; }
+.btn-signout:hover { border-color: #C03030; color: #C03030; }
+
+/* Touch ghost */
+.drag-ghost-el {
+  position: fixed; pointer-events: none; z-index: 999;
+  opacity: .85; border-radius: 10px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.2);
+  transform: rotate(.7deg) scale(1.02);
+  transition: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .layout { flex-direction: column; }
+  aside { width: 100%; }
+  .f-btn { width: auto; flex: none; padding: 7px 12px; }
+  .tip-box { display: none; }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+
+<!-- Auth screen -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">Interview<span>Studio</span></div>
+    <div class="auth-tagline">& Dietz · Rekruttering</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="authTab('login')">Log ind</button>
+      <button class="auth-tab" id="tab-signup" onclick="authTab('signup')">Opret konto</button>
+    </div>
+    <div id="auth-login">
+      <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="din@email.dk" autocomplete="email"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="login-pwd" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="auth-btn" id="login-btn" onclick="doLogin()">Log ind</button>
+      <div class="auth-divider">eller</div>
+      <button class="auth-google" onclick="doGoogle()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Fortsæt med Google
+      </button>
+    </div>
+    <div id="auth-signup" style="display:none">
+      <div class="auth-field"><label>Email</label><input type="email" id="signup-email" placeholder="din@email.dk" autocomplete="email"></div>
+      <div class="auth-field"><label>Password</label><input type="password" id="signup-pwd" placeholder="Mindst 6 tegn" autocomplete="new-password"></div>
+      <button class="auth-btn" id="signup-btn" onclick="doSignup()">Opret konto</button>
+      <div class="auth-divider">eller</div>
+      <button class="auth-google" onclick="doGoogle()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Fortsæt med Google
+      </button>
+    </div>
+    <div class="auth-msg" id="auth-msg"></div>
+  </div>
+</div>
+
+<header>
+  <div><span class="logo-a">Interview</span><span class="logo-b">Studio</span></div>
+  <div style="display:flex;gap:4px;background:#EDEAE3;border-radius:9px;padding:3px">
+    <button class="tab-btn active" id="tab-bank" onclick="switchTab('bank')">Spørgsmål</button>
+    <button class="tab-btn" id="tab-guide" onclick="switchTab('guide')">Interviewguide</button>
+    <button class="tab-btn" id="tab-bias" onclick="switchTab('bias')">Bias</button>
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-o" id="hdr-pdf" onclick="openPdfModal()">⎙ <span id="pdf-lbl">Download PDF</span></button>
+    <button class="btn btn-p" id="hdr-add-q" onclick="openAdd()">+ Nyt spørgsmål</button>
+    <button class="btn btn-p" id="hdr-add-g" onclick="openAddGuide()" style="display:none">+ Nyt princip</button>
+    <button class="btn btn-p" id="hdr-add-b" onclick="openAddBias()" style="display:none">+ Ny bias</button>
+    <div class="user-pill" id="user-pill" style="display:none">
+      <div class="user-avatar" id="user-avatar"></div>
+      <span id="user-email-short" style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+      <button class="btn btn-signout" onclick="doSignout()">Log ud</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout" id="main-layout">
+  <aside>
+    <div class="s-lbl">Kategorier</div>
+    <button class="f-btn" data-f="all"         onclick="setFilter('all')">        <span>Alle spørgsmål</span>  <span class="f-cnt" id="cnt-all">0</span></button>
+    <button class="f-btn" data-f="aabning"     onclick="setFilter('aabning')">    <span>Åbning & screening</span><span class="f-cnt" id="cnt-aa">0</span></button>
+    <button class="f-btn" data-f="kompetencer" onclick="setFilter('kompetencer')"><span>Kompetencer</span>     <span class="f-cnt" id="cnt-k">0</span></button>
+    <button class="f-btn" data-f="adfaerd"     onclick="setFilter('adfaerd')">    <span>Adfærd</span>          <span class="f-cnt" id="cnt-a">0</span></button>
+    <button class="f-btn" data-f="resultater"  onclick="setFilter('resultater')"> <span>Resultater</span>      <span class="f-cnt" id="cnt-r">0</span></button>
+    <button class="f-btn" data-f="reference"   onclick="setFilter('reference')">  <span>Referencetjek</span>  <span class="f-cnt" id="cnt-ref">0</span></button>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sel-panel" id="sel-panel">
+      <div class="sel-lbl">Til interviewet</div>
+      <div class="sel-n" id="sel-n"></div>
+      <button class="f-btn" data-f="starred" onclick="setFilter('starred')" style="margin-bottom:8px">
+        <span>Vis markerede</span><span class="f-cnt" id="cnt-star">0</span>
+      </button>
+      <button class="btn btn-p btn-blk" onclick="openPdfModal()">⎙ Download PDF</button>
+      <button class="btn btn-ghost btn-blk" onclick="clearStars()">Ryd markering</button>
+    </div>
+
+    <div class="tip-box">
+      <strong>★ Markér</strong> spørgsmål du vil bruge til et bestemt interview, og download dem som PDF-guide.<br><br>
+      <strong>⠿ Træk</strong> i håndtaget for at ændre rækkefølgen.
+    </div>
+  </aside>
+
+  <main id="q-list">
+    <div class="hero-banner">
+      <div class="hero-left">
+        <div class="hero-eyebrow">& Dietz · Interview Studio</div>
+        <div class="hero-title">Dine spørgsmål.<br>Din metode.</div>
+        <div class="hero-body">Samlet fra 20 interviews med erfarne ledere og år med rekrutteringspraksis. Brug dem som de er, tilpas dem til rollen, eller byg din egen bank fra bunden.</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><span class="hero-n">35</span><span class="hero-l">spørgsmål</span></div>
+        <div class="hero-stat"><span class="hero-n">5</span><span class="hero-l">kategorier</span></div>
+        <div class="hero-stat"><span class="hero-n">20</span><span class="hero-l">lederinterviews</span></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Guide layout -->
+<div id="guide-layout">
+  <aside class="g-aside">
+    <div class="s-lbl">Interviewguide</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px">11 principper og metoder til at gøre dit interview bedre.</div>
+    <div class="tip-box">
+      <strong>Klik på et princip</strong> for at læse mere, inkl. konkrete teknikker og eksempler.<br><br>
+      <strong>✎</strong> Rediger eller tilføj dine egne principper.
+    </div>
+  </aside>
+  <main class="g-main" id="g-list">
+    <div class="guide-intro">
+      <div class="guide-intro-inner">
+        <div class="guide-intro-tag">Greatest Hits</div>
+        <div class="guide-intro-title">Det jeg ved virker</div>
+        <div class="guide-intro-text">De her principper er ikke teori. De er destilleret fra samtaler med over 20 erfarne ledere i mit netværk, kombineret med egne erfaringer fra tusindvis af timer i rekrutteringsrummet. Det er dem, jeg selv vender tilbage til hver gang. Brug dem som tjekliste inden, refleksion efter, eller bare som en reminder om hvad der faktisk gør forskellen.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="bias-layout">
+  <aside class="g-aside">
+    <div class="s-lbl">Bias</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:14px">17 former for bias i rekruttering. Lær dem at kende og tilføj dine egne.</div>
+    <div class="tip-box">
+      <strong>Klik på en bias</strong> for at læse mere om den.<br><br>
+      <strong>✎</strong> Tilføj kommentarer eller egne bias-erfaringer.
+    </div>
+  </aside>
+  <main class="g-main" id="b-list">
+    <div class="bias-intro">
+      <div class="bias-intro-title">Mennesketyper, personlighedstræk og bias</div>
+      <div class="bias-intro-body">Hovedårsagen til at vi som udgangspunkt er dårlige til at vurdere andre mennesker er, at vi forvrænger de indtryk vi får, og at vi er dygtige til at tænke i mønstre. Bagsiden ved mønstre er, at vi lynhurtigt konkluderer på meget lidt information.<br><br>
+      Ved at være bevidste om disse forvrængningsmønstre kan vi bedre og mere effektivt evaluere kandidaterne. Start med at kende dig selv: dine egne værdier, din personlighedstype og din læringsstil er ophav til de fleste af dine forvrængninger.<br><br>
+      <em>Husk: vi bliver aldrig fri for bias. Det er et menneskeligt vilkår. Pointen er at blive mere bevidst. Ikke perfekt.</em></div>
+      <div class="bias-story">
+        <div class="bias-story-lbl">En lille fortælling om ubevidst forforståelse</div>
+        En aften kører en far og hans søn hjem fra en begivenhed. Bilen skrider ud på en glat vej og rammer et træ. Faren dør på stedet. Sønnen er alvorligt kvæstet og køres til hospitalet. Kirurgen ser drengen på operationsbordet og siger:<br><br>
+        <em>"Jeg kan ikke operere ham. Han er min søn."</em><br><br>
+        Hvordan kan det være? Faren er jo død.<br><br>
+        Kirurgen er hans mor.<br><br>
+        <strong>Over halvdelen af dem der hører dette gåde, sidder fast, fordi vi ubevidst antager at en kirurg er en mand. Det er unconscious bias i praksis: vi ved ikke engang vi har den, før vi opdager at vi sidder fast.</strong>
+      </div>
+    </div>
+    <div id="b-cards"></div>
+  </main>
+</div>
+
+<!-- Print view -->
+<div id="pv">
+  <div class="pv-ctrl">
+    <button class="btn btn-p" style="font-size:13px" onclick="window.print()">⎙ Gem som PDF / Udskriv</button>
+    <button class="btn btn-o" style="font-size:13px" onclick="hidePrint()">← Tilbage</button>
+  </div>
+  <div id="pv-content"></div>
+</div>
+
+<!-- Add / Edit modal -->
+<div class="overlay" id="overlay" onclick="bgClick(event)">
+  <div class="modal">
+    <h2 id="mtitle">Nyt spørgsmål</h2>
+    <label class="flbl">Spørgsmål</label>
+    <textarea id="f-text" rows="3" placeholder="Skriv dit interviewspørgsmål her…" style="margin-bottom:18px"></textarea>
+    <label class="flbl">Kategori</label>
+    <div class="cat-grid" id="cat-grid"></div>
+    <label class="flbl">Noter <span>valgfrit</span></label>
+    <textarea id="f-notes" rows="3" placeholder="Hvad skal du kigge efter? Røde flag? Gode følgespørgsmål?"></textarea>
+    <div class="mfooter">
+      <button class="btn btn-o" onclick="closeModal()">Annuller</button>
+      <button class="btn btn-p" onclick="saveQ()">Gem spørgsmål</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirm -->
+<div class="del-confirm" id="del-confirm">
+  <div class="del-box">
+    <h3>Slet spørgsmål?</h3>
+    <p id="del-text">Dette kan ikke fortrydes.</p>
+    <div class="del-actions">
+      <button class="btn btn-o" onclick="cancelDelete()">Annuller</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Slet</button>
+    </div>
+  </div>
+</div>
+
+<!-- Guide modal -->
+<div class="gmodal-overlay" id="goverlay" onclick="gOverlayBg(event)">
+  <div class="gmodal">
+    <h2 id="gmtitle">Nyt princip</h2>
+    <input type="hidden" id="g-edit-id">
+    <label class="flbl">Overskrift</label>
+    <input type="text" id="g-headline" placeholder="fx Den lille stemme" style="margin-bottom:14px">
+    <label class="flbl">Kort forklaring <span>vises direkte på kortet</span></label>
+    <textarea id="g-short" rows="2" placeholder="1-2 sætninger der fanger kernen" style="margin-bottom:14px"></textarea>
+    <label class="flbl">Detaljer & teknikker <span>åbnes ved klik</span></label>
+    <textarea id="g-detail" rows="6" placeholder="Uddybende forklaring, konkrete eksempler, teknikker du kan bruge..."></textarea>
+    <div class="mfooter">
+      <button class="btn btn-o" onclick="closeGModal()">Annuller</button>
+      <button class="btn btn-p" onclick="saveGuide()">Gem princip</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bias modal -->
+<div class="overlay" id="boverlay" onclick="bOverlayBg(event)">
+  <div class="modal">
+    <h2 id="bmtitle">Ny bias</h2>
+    <label class="flbl">Navn på bias</label>
+    <input type="text" id="b-headline" placeholder="fx Ankerbias" style="margin-bottom:14px">
+    <label class="flbl">Kort forklaring <span>vises direkte på kortet</span></label>
+    <textarea id="b-short" rows="2" placeholder="1-2 sætninger der fanger kernen" style="margin-bottom:14px"></textarea>
+    <label class="flbl">Beskrivelse <span>åbnes ved klik</span></label>
+    <textarea id="b-detail" rows="4" placeholder="Hvad er bias? Hvordan opstår den? Hvad kan du gøre?" style="margin-bottom:14px"></textarea>
+    <label class="flbl">Mine noter <span>egne erfaringer og kommentarer</span></label>
+    <textarea id="b-notes" rows="3" placeholder="Egne eksempler, erfaringer, ting du vil huske..."></textarea>
+    <div class="mfooter">
+      <button class="btn btn-o" onclick="closeBModal()">Annuller</button>
+      <button class="btn btn-p" onclick="saveBiasEntry()">Gem bias</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
